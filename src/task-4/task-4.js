@@ -26,7 +26,17 @@ export default class ShoppingCart {
      * @returns {undefined}
      */
     addEventListeners() {
-        // Change me!
+      this.cartEl.addEventListener("click", e => {
+        if (e.target.tagName === "BUTTON") {
+          this.removeItem(e.target.dataset.itemId);
+        }
+      });
+
+      this.removeAllEl.addEventListener("click", e => {
+        if (e.target.tagName === "BUTTON") {
+          this.removeAll();
+        }
+      });
     }
 
     /**
@@ -36,6 +46,7 @@ export default class ShoppingCart {
      * @returns {undefined}
      */
     addItem(item) {
+      console.log("*");
         if (!this.isItemInCart(item.id)) {
             this.addNewItem(item);
         } else {
@@ -60,7 +71,13 @@ export default class ShoppingCart {
      * @returns {undefined}
      */
     incrementItem(item) {
-        // Change me!
+      const curItem = this.cartEl.querySelector(`ul > li[data-item-id=${item.id}]:not(.d-none)`);
+      const newQtyItem = +curItem.getAttribute("data-item-qty") + 1;
+
+      curItem.setAttribute("data-item-qty", `${newQtyItem}`);
+      curItem.querySelector("div > div > span.item-qty").innerHTML = newQtyItem;
+      curItem.setAttribute("data-item-total", `${+curItem.getAttribute("data-item-total")
+       + (+curItem.getAttribute("data-item-price"))}`);
     }
 
     /**
@@ -69,7 +86,10 @@ export default class ShoppingCart {
      * @returns {boolean} - true if item is present in shopping cart, false otherwise
      */
     isItemInCart(id) {
-        // Change me!
+      const item = this.cartEl.querySelector(`li[data-item-id=${id}]:not(.d-none)`);
+
+      if (item !== null) return true;
+      return false;
     }
 
     /**
@@ -77,7 +97,10 @@ export default class ShoppingCart {
      * @returns {boolean} true if there's no items in cart, false otherwise
      */
     isCartEmpty() {
-        // Change me!
+      const item = this.cartEl.querySelectorAll(`ul > li:not(.d-none)`);
+
+      if (item.length === 0) return true;
+      return false;
     }
 
     /**
@@ -85,7 +108,8 @@ export default class ShoppingCart {
      * @returns {undefined}
      */
     removeAll() {
-        // Change me!
+        this.cartEl.innerHTML = "";
+        this.updateCartState();
     }
 
     /**
@@ -94,7 +118,11 @@ export default class ShoppingCart {
      * @returns {undefined}
      */
     removeItem(id) {
-        // Change me!
+        const item = this.cartEl.querySelector(`ul > li[data-item-id=${id}]`);
+
+        this.cartEl.removeChild(item);
+
+        this.updateCartState();
     }
 
     /**
@@ -112,7 +140,10 @@ export default class ShoppingCart {
      * @returns {undefined}
      */
     updateTotal() {
-        // Change me!
+        const totalSum = this.getTotalSum();
+
+        this.totalEl.setAttribute("total", `${totalSum}`);
+        this.totalEl.innerHTML = totalSum;
     }
 
     /**
@@ -120,7 +151,11 @@ export default class ShoppingCart {
      * @returns {number} Total sum
      */
     getTotalSum() {
-        // Change me!
+        const itemList = [...this.cartEl.querySelectorAll(`ul > li:not(.d-none)`)];
+
+        return itemList.reduce( (acc, curVal, curIndex) => {
+          return acc + +curVal.getAttribute("data-item-total");
+        }, 0);
     }
 
     /**
@@ -129,9 +164,9 @@ export default class ShoppingCart {
      */
     updateNoItemsMessage() {
         if (this.isCartEmpty()) {
-            // Change me!
+            this.emptyCartEl.classList.remove("d-none");
         } else {
-            // Change me!
+            this.emptyCartEl.classList.add("d-none");
         }
     }
 
@@ -140,6 +175,7 @@ export default class ShoppingCart {
      * @returns {undefined}
      */
     updateRemoveAllButton() {
-        // Change me!
+        if (!this.isCartEmpty()) this.removeAllEl.classList.remove("d-none");
+        else this.removeAllEl.classList.add("d-none");
     }
 }

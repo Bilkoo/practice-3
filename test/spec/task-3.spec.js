@@ -32,7 +32,7 @@ function checkZebra() {
 describe("Task 3: Table Filterer", () => {
 
     beforeEach(() => {
-        table = document.createElement("table");
+        table = document.createElement("tbody");
         renderTable(table, albums, ["album", "performer", "genre", "year"]);
     });
 

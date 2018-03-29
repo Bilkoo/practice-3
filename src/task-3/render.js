@@ -1,5 +1,8 @@
 
 function getRowHtml(fields, row, index) {
+  //console.log(fields);
+  //console.log(row);
+  //console.log(index);
     const cells = fields.map(field => `<td data-field-name="${field}">${row[field]}</td>`).join("");
 
     return `
