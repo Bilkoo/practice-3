@@ -76,8 +76,6 @@ export default class ShoppingCart {
 
       curItem.setAttribute("data-item-qty", `${newQtyItem}`);
       curItem.querySelector("div > div > span.item-qty").innerHTML = newQtyItem;
-      curItem.setAttribute("data-item-total", `${+curItem.getAttribute("data-item-total")
-       + (+curItem.getAttribute("data-item-price"))}`);
     }
 
     /**
@@ -154,7 +152,7 @@ export default class ShoppingCart {
         const itemList = [...this.cartEl.querySelectorAll(`ul > li:not(.d-none)`)];
 
         return itemList.reduce( (acc, curVal, curIndex) => {
-          return acc + +curVal.getAttribute("data-item-total");
+          return acc + (+curVal.getAttribute("data-item-qty") * +curVal.getAttribute("data-item-price"));
         }, 0);
     }
 
